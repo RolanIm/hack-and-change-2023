@@ -2,7 +2,6 @@
 # Трек Web от QIWI
 ## Кэширование запросов для уменьшения зависимости от внешних тестовых сред партнеров от QIWI
 
-
 <p align="center">
 <img src="https://img.shields.io/badge/Python-100000?style=for-the-badge&logo=python&logoColor=FFFFFF&labelColor=306998&color=black">
 
@@ -22,33 +21,59 @@
 сред партнеров, а при повторных запросах — использовать сохраненные данные. Цель создания приложения —
 снижение зависимости тестовой среды QIWI от состояния внешних тестовых сред партнеров, например банковэквайеров или Системы быстрых платежей (СБП). 
 
-<a href="https://github.com/Khisrav/hack-and-change-2023-qiwi-frontend">Frontend</a> | <a href="https://aquamarine-cocada-9be2f6.netlify.app/">Превью</a>
-
 ## Установка
+Клонируйте репозиторий на свой ПК:
+
 ```
-npm install
+git clone https://github.com/RolanIm/api_final_yatube-master.git
 ```
 
-### Компиляция
+Install and create the virtual environment:
+
 ```
-npm run serve
+python3 -m venv venv
 ```
 
-### Compiles and minifies for production
+Activate a virtual environment:
+- for windows:
+
+  ```
+  source venv/Scripts/activate
+  ```
+- for Unix/macOS:
+
+  ```
+  source venv/bin/activate
+  ```
+
+Install dependencies from the file requirements.txt: 
+
 ```
-npm run build
+pip install -r requirements.txt
+```
+Go to the yatube_api directory:
+
+```
+cd reqs_caching/
 ```
 
-### Lints and fixes files
+Make migrations
+
 ```
-npm run lint
+python manage.py makemigrations
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+```
+python manage.py migrate
+```
 
+Run the `manage.py` file: 
 
-## Команда Code Warriors
+```
+python manage.py runserver
+```
+
+## Команда
 
 - Орлова Екатерина - [@katikovka](https://t.me/katikovka)
 
