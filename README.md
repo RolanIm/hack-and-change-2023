@@ -25,7 +25,7 @@
 Клонируйте репозиторий на свой ПК:
 
 ```
-[git clone https://github.com/RolanIm/hack-and-change-2023.git
+git clone https://github.com/RolanIm/hack-and-change-2023.git
 ```
 
 Install and create the virtual environment:
