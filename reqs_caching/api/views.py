@@ -1,18 +1,22 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.status import (HTTP_200_OK,
+                                   HTTP_400_BAD_REQUEST,
+                                   HTTP_404_NOT_FOUND)
 
 import requests
 import redis
-import json
 
 from cacher.models import Request, Response
 from .serializers import RequestSerializer, ResponseSerializer
+
+import json
 
 
 class MasterReqsView(APIView):
     def post(self, request):
         # Parse request data
+        print(f'|| {request.method} ||||')
         serializer = RequestSerializer(data=request.data)
         if serializer.is_valid():
             url = serializer.validated_data['url']
@@ -21,7 +25,7 @@ class MasterReqsView(APIView):
             body = serializer.validated_data['body']
         else:
             return Response({'error': 'Invalid request data'},
-                            status=HTTP_400_BAD_REQUEST)
+                            status=HTTP_404_NOT_FOUND)
 
         # Check if request and response data is already cached in Redis
         r = redis.Redis(host='localhost', port=6379, db=0)
@@ -33,10 +37,14 @@ class MasterReqsView(APIView):
         # If request and response data is not cached,
         # make request to external API and cache it
         if request_cached is None or response_cached is None:
+            proxies = {
+                "http": "http://127.0.0.1:8080",
+            }
             response = requests.request(method,
                                         url,
                                         headers=headers,
-                                        data=body)
+                                        data=body,
+                                        proxies=proxies)
 
             # Check if response is valid
             if response.status_code != 200:
@@ -81,7 +89,13 @@ class VisaReqsView(APIView):
     def put(self, request):
         # Parse request data
         body_reqst = request.data.get('body')
-        req_obj = Request.objects.get(**body_reqst)
+        try:
+            req_obj = Request.objects.get(**body_reqst)
+        except Request.DoesNotExists:
+            return Response(
+                {'error': 'The object does not exist in the database'},
+                status=HTTP_400_BAD_REQUEST)
+
         serializer = RequestSerializer(req_obj, data=request.data)
         if serializer.is_valid():
             url = serializer.validated_data['url']
@@ -102,10 +116,14 @@ class VisaReqsView(APIView):
         # If request and response data is not cached,
         # make request to external API and cache it
         if request_cached is None or response_cached is None:
+            proxies = {
+                "http": "http://127.0.0.1:8080",
+            }
             response = requests.request(method,
                                         url,
                                         headers=headers,
-                                        data=body)
+                                        data=body,
+                                        proxies=proxies)
 
             # Check if response is valid
             if response.status_code != 200:
