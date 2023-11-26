@@ -48,7 +48,7 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
-## Команда
+## Команда Code Warriors
 
 - Орлова Екатерина - [@katikovka](https://t.me/katikovka)
 
