@@ -25,7 +25,7 @@
 Клонируйте репозиторий на свой ПК:
 
 ```
-git clone https://github.com/RolanIm/api_final_yatube-master.git
+[git clone https://github.com/RolanIm/hack-and-change-2023.git
 ```
 
 Install and create the virtual environment:
